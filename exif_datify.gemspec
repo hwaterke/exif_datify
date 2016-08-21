@@ -6,11 +6,11 @@ require 'exif_datify/version'
 Gem::Specification.new do |spec|
   spec.name          = "exif_datify"
   spec.version       = ExifDatify::VERSION
-  spec.authors       = ["hwaterke"]
+  spec.authors       = ["Harold Waterkeyn"]
   spec.email         = ["hwaterke@users.noreply.github.com"]
 
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
+  spec.summary       = %q{Prepend files with date and time from exif information}
+  spec.description   = %q{Name files based on exif information}
   spec.homepage      = "https://github.com/hwaterke/exif_datify"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
