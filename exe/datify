@@ -2,21 +2,50 @@
 
 require 'exif_datify'
 require 'find'
-
-raise "First argument must be a file or a directory path." unless ARGV.size == 1
+require 'optparse'
 
 date_extractor = ExifDatify::DateExtractor.new
+extensions = nil
+
+opt_parser = OptionParser.new do |opts|
+  opts.banner = "Usage: datify [options] path"
+
+  opts.on("-e", "--ext jpg,mov,png", Array, "File extensions to process.", "All by defaults.") do |list|
+    extensions = list.map { |e| ".#{e.downcase}" }
+  end
+
+  opts.on("-t", "--tags x,y,z", Array, "EXIF tags to use. Ordered by priority.", "Default is #{date_extractor.tags.join(',')}") do |list|
+    date_extractor.tags = list
+  end
+
+  opts.on("-f", "--format FORMAT", "Datetime format to use.", "Default is '#{date_extractor.datetime_format}'") do |f|
+    date_extractor.datetime_format = f
+  end
+
+  opts.on("-q", "--quiet", "Runs quietly") do |q|
+    date_extractor.quiet!
+  end
+
+  opts.on("-h", "--help", "Prints this help") do
+    puts opts
+    exit
+  end
+end
+
+opt_parser.parse!(ARGV)
+raise "First argument must be a file or a directory path." unless ARGV.size == 1
 
 if File.directory?(ARGV[0])
-	Find.find(ARGV[0]) do |entry|
-		next if FileTest.directory?(entry)
-		begin
-			date_extractor.rename(entry)
-		rescue StandardError => e
-			puts "Error: #{e}"
-		end
-	end
-	puts "Processed #{date_extractor.counters[:total]} files, renamed #{date_extractor.counters[:renamed]}"
+  Find.find(ARGV[0]) do |entry|
+    next if FileTest.directory?(entry)
+    next unless extensions.nil? or extensions.include?(File.extname(entry).downcase)
+    begin
+      date_extractor.rename(entry)
+    rescue StandardError => e
+      puts "Error: #{e}"
+    end
+  end
+  puts "Processed #{date_extractor.counters[:total]} files, renamed #{date_extractor.counters[:renamed]}"
 else
-	date_extractor.rename(ARGV[0])
+  date_extractor.rename(ARGV[0])
 end

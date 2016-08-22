@@ -5,13 +5,18 @@ require 'json'
 module ExifDatify
   class DateExtractor
     attr_reader :counters
-    DATETIME_FORMAT = "%Y-%m-%d_%H-%M-%S_"
+    attr_accessor :datetime_format, :tags
     DATETIME_REGEX = /^\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}/
 
     def initialize
       @tags = ['DateTimeOriginal', 'MediaCreateDate']
+      @datetime_format = "%Y-%m-%d_%H-%M-%S_"
       @quiet = false
       @counters = Hash.new(0)
+    end
+
+    def quiet!
+      @quiet = true
     end
 
     def extract_datetime(file_path)
@@ -37,7 +42,7 @@ module ExifDatify
       if datetime.nil?
         puts "Could not extract date from #{current_name}" unless @quiet
       else
-        prefix = datetime.strftime(DATETIME_FORMAT)
+        prefix = datetime.strftime(@datetime_format)
         unless current_name.start_with?(prefix)
           prefixed_name = File.join(File.dirname(file_path), prefix + current_name)
           if File.exist?(prefixed_name)
