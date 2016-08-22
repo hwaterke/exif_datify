@@ -1,4 +1,6 @@
 require "exif_datify/version"
+require 'date'
+require 'json'
 
 module ExifDatify
   class DateExtractor

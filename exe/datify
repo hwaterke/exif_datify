@@ -18,5 +18,5 @@ if File.directory?(ARGV[0])
 	end
 	puts "Processed #{date_extractor.counters[:total]} files, renamed #{date_extractor.counters[:renamed]}"
 else
-	date_extractor.process(ARGV[0])
+	date_extractor.rename(ARGV[0])
 end

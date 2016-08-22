@@ -2,6 +2,11 @@
 
 Prepend files with date and time from exif information
 
+## Prerequisites
+
+This gem requires `exiftool` to be installed.
+On a Mac, this can be done with `brew install exiftool`.
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -20,7 +25,15 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```
+datify photo.jpg
+```
+
+or
+
+```
+datify photo_directory
+```
 
 ## Development
 
@@ -31,4 +44,4 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/exif_datify.
+Bug reports and pull requests are welcome on GitHub at https://github.com/hwaterke/exif_datify.
