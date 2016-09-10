@@ -1,5 +1,7 @@
 # ExifDatify
 
+[![Build Status](https://img.shields.io/travis/hwaterke/exif_datify/master.svg?style=flat-square)](https://travis-ci.org/hwaterke/exif_datify)
+
 Prepend files with date and time from exif information
 
 ## Prerequisites
