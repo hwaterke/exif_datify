@@ -58,7 +58,7 @@ module ExifDatify
       @counters[:total] += 1
       datetime = extract_datetime(file_path)
       if datetime.nil?
-        puts "Could not extract date from #{current_name}" unless @quiet
+        puts "Could not extract date from #{file_path}" unless @quiet
       else
         operate(file_path, datetime)
       end
