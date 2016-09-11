@@ -10,11 +10,27 @@ extensions = nil
 opt_parser = OptionParser.new do |opts|
   opts.banner = "Usage: datify [options] path"
 
+  opts.on('-r', '--rename', "Sets the operation to renaming (default)") do
+    date_extractor.rename!
+  end
+
+  opts.on('-m', '--move DESTINATION_FOLDER', "Sets the operation to move") do |destination|
+    date_extractor.move!(destination)
+  end
+
+  opts.on('-c', '--copy DESTINATION_FOLDER', "Sets the operation to copy") do |destination|
+    date_extractor.copy!(destination)
+  end
+
+  opts.on('-s', '--subdirectories', "For move and copy, create new directories in destination for each year and month") do
+    date_extractor.month_subdirectories!
+  end
+
   opts.on("-e", "--ext jpg,mov,png", Array, "File extensions to process.", "All by defaults.") do |list|
     extensions = list.map { |e| ".#{e.downcase}" }
   end
 
-  opts.on("-t", "--tags x,y,z", Array, "EXIF tags to use. Ordered by priority.", "Default is #{date_extractor.tags.join(',')}") do |list|
+  opts.on("-t", "--tags x,y,z", Array, "EXIF tags to use. Ordered by priority.", "Default is #{date_extractor.tags.join(', ')}") do |list|
     date_extractor.tags = list
   end
 
@@ -24,6 +40,10 @@ opt_parser = OptionParser.new do |opts|
 
   opts.on("-q", "--quiet", "Runs quietly") do |q|
     date_extractor.quiet!
+  end
+
+  opts.on("-v", "--verbose", "Verbose logging") do |q|
+    date_extractor.logger.level = Logger::DEBUG
   end
 
   opts.on("-h", "--help", "Prints this help") do
@@ -40,7 +60,7 @@ if File.directory?(ARGV[0])
     next if FileTest.directory?(entry)
     next unless extensions.nil? or extensions.include?(File.extname(entry).downcase)
     begin
-      date_extractor.rename(entry)
+      date_extractor.process(entry)
     rescue StandardError => e
       puts "Error: #{e}"
     end
